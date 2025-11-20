@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/style.css">
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <title>bear</title>
+</head>
+<body>
+    <br>
+    <main class="text-center">
+        <h1>sign into <span class="indigo"><%= appName %></span> with wasteof.</h1>
+        <input type="text" placeholder="Loading..." id="code" readonly>
+        <br>
+        <br>
+        <a href="<%= post %>" target="_blank">
+            <button>comment the code on this post</button>
+        </a>
+        <button id="done">i did it!</button>
+    </main>
+
+    <script type="module">
+        const codeInput = document.getElementById('code');
+        const doneButton = document.getElementById('done');
+        let left = false;
+
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+                left = true;
+                console.log('left page');
+            }
+        });
+
+        (async () => {
+            const { data } = await axios.get('/api/getCodes');
+            let pub = data.pub;
+            let priv = data.priv;
+            codeInput.value = pub;
+
+            doneButton.onclick = async () => {
+                const { data } = await axios.get(`/api/done?pub=${pub}`);
+                if(data.error) {
+                    alert(`Error: ${data.info}`);
+                } else {
+                    let params = new URLSearchParams(document.location.search);
+                    location.href = atob(params.get('redirect')) + "?priv=" + priv;
+                }
+            }
+        })();
+    </script>
+</body>
+</html>
