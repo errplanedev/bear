@@ -1,5 +1,5 @@
 # bear
-bear is an unofficial authentication website/api for 3rd party apps using wasteof.money.
+bear is an unofficial authentication website/api for 3rd party apps using wasteof.money, kinda like scratchauth.
 
 ## use
 coming soon... (probably tomorrow)
