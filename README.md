@@ -2,7 +2,7 @@
 bear is an unofficial authentication website/api for 3rd party apps using wasteof.money, kinda like scratchauth.
 
 ## use
-coming soon... (probably tomorrow)
+[here are docs](https://bear.dour.com/docs)
 
 ## license
 see `LICENSE.md`
