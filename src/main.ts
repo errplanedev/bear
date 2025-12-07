@@ -12,6 +12,7 @@ app.use(express.static("public"));
 const port = process.env.PORT || 3000;
 const authUser = process.env.USER || "bear";
 const postId = process.env.AUTH_POST || "691e6f2721772c0378d6897b";
+const baseUrl = process.env.BASE_URL || `http://localhost:${port}`;
 
 // Storing in memory... bad idea.......
 let d = [];
@@ -35,19 +36,15 @@ app.get("/auth", (req, res) => {
 });
 
 app.get("/demo", (req, res) => {
-  const redirectLocation = new Buffer(
-    `http://${req.hostname}:${port}/demo/handle`,
-  ).toString("base64");
-  res.redirect(
-    `http://${req.hostname}:${port}/auth?redirect=${redirectLocation}&name=demo`,
+  const redirectLocation = Buffer.from(`${baseUrl}/demo/handle`).toString(
+    "base64",
   );
+  res.redirect(`${baseUrl}/auth?redirect=${redirectLocation}&name=demo`);
 });
 
 app.get("/demo/handle", async (req, res) => {
   const { priv } = req.query;
-  const { data } = await axios.get(
-    `http://${req.hostname}:${port}/api/verifyToken?priv=${priv}`,
-  );
+  const { data } = await axios.get(`${baseUrl}/api/verifyToken?priv=${priv}`);
   if (data.error) {
     return res.json({ error: true, info: data.info });
   } else {
@@ -64,8 +61,8 @@ app.get("/api/verifyToken", async (req, res) => {
   if (!priv) {
     return res.json({ error: true, info: "provide ?priv=key" });
   }
-  const obj = d.find((x) => (x.priv = priv));
-  if (obj.username == null) {
+  const obj = d.find((x) => x.priv === priv);
+  if (!obj || obj.username == null) {
     return res.json({ error: true, info: "invalid token." });
   }
   const username = obj.username;
