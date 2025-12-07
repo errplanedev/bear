@@ -35,6 +35,10 @@ app.get("/auth", (req, res) => {
   });
 });
 
+app.get("/docs", (req, res) => {
+  return res.render("docs");
+});
+
 app.get("/demo", (req, res) => {
   const redirectLocation = Buffer.from(`${baseUrl}/demo/handle`).toString(
     "base64",

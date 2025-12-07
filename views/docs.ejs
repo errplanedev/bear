@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="https://unpkg.com/@highlightjs/cdn-assets@11.11.1/styles/default.min.css">
+    <script src="https://unpkg.com/@highlightjs/cdn-assets@11.11.1/highlight.min.js"></script>
+    <title>bear</title>
+</head>
+<body>
+    <main>
+        <h1>bear documentation</h1>
+        <p>how to use bear in your app</p>
+        <b>the docs are unfinished. tbh u can pretty much just use this code example but modify it for a database</b>
+        <pre>
+            <code class="language-typescript">
+app.get("/auth", (req, res) => {
+    const redirectLocation = Buffer.from(`https://example.com/demo/handle`).toString(
+    "base64",
+    );
+    res.redirect(`https://bear.dour.com/auth?redirect=${redirectLocation}&name=demo`);
+});
+
+app.get("/auth/handle", async (req, res) => {
+    const { priv } = req.query;
+    const { data } = await axios.get(`https://bear.dour.com/api/verifyToken?priv=${priv}`);
+    if (data.error) {
+    return res.json({ error: true, info: data.info });
+    } else {
+    // For this example, we're just responding with the user's username, although you should create the user in the database and generate a session token.
+    return res.json({
+        error: false,
+        info: "it worked!",
+        username: data.username,
+    });
+    }
+});
+            </code>
+        </pre>
+        <p>(expressjs)</p>
+        <script>hljs.highlightAll();</script>
+    </main>
+</body>
+</html>
