@@ -34,7 +34,7 @@ button:active {
     transform: scale(0.95, 0.95);
 }
 
-input {
+input, select {
     margin-top: 0px !important;
     width: 100%;
     border-radius: 0.5rem;
@@ -60,4 +60,8 @@ a:has(button) {
 
 .indigo {
     color: #6366f1;
+}
+
+a, a:visited {
+    color: rgb(165, 180, 252); 
 }

@@ -31,7 +31,7 @@ app.get("/auth", (req, res) => {
   res.render("auth", {
     redirect,
     appName: name,
-    post: `https://wasteof.money/posts/${postId}`,
+    post: postId,
   });
 });
 

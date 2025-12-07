@@ -14,16 +14,49 @@
         <input type="text" placeholder="Loading..." id="code" readonly>
         <br>
         <br>
-        <a href="<%= post %>" target="_blank">
+        <label for="frontend">Choose a frontend:</label>
+        <br/>
+        <select name="frontend" id="frontend">
+            <option value="prod">production (wasteof.money)</option>
+            <option value="alpha">alpha (alpha.wasteof.money)</option>
+            <option value="eris">eris (wasteof.eris.cafe)</option>
+        </select>
+        <br/>
+        <small>want to have your frontend here? <a href="https://github.com/errplanedev/bear/issues/new">make an issue on the repo!</a></small>
+        <br/>
+        <br/>
+        <!-- fallback to prod for some reason -->
+        <a href="https://wasteof.money/posts/<%= post %>" target="_blank" id="commentLink">
             <button>comment the code on this post</button>
         </a>
         <button id="done">i did it!</button>
     </main>
 
+    <data value="<%= post %>" id="postId"></data>
     <script type="module">
         const codeInput = document.getElementById('code');
         const doneButton = document.getElementById('done');
         let left = false;
+
+        // Just in case.
+        const frontendMappings = {
+            // DO NOT APPEND THE SLASHES AT THE END
+            prod: "https://wasteof.money/posts",
+            alpha: "https://alpha.wasteof.money/posts",
+            eris: "https://wasteof.eris.cafe/posts"
+        }
+
+        const frontendSelect = document.getElementById("frontend");
+        const commentLink = document.getElementById("commentLink");
+        const postId = document.getElementById("postId").value;
+
+        function updateCommentLink(e) {
+            commentLink.href = `${frontendMappings[e.target.value]}/${postId}`;
+        }
+
+        updateCommentLink({ target: { value: frontendSelect.value } });
+
+        frontendSelect.addEventListener("change", updateCommentLink);
 
         document.addEventListener('visibilitychange', () => {
             if (document.hidden) {
