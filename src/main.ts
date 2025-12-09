@@ -49,6 +49,11 @@ app.get("/demo", (req, res) => {
 app.get("/demo/handle", async (req, res) => {
   const { priv } = req.query;
   const { data } = await axios.get(`${baseUrl}/api/verifyToken?priv=${priv}`);
+  // Make sure that the redirect location is ours, so malicious actors don't trick users into authenticating.
+  if(data.redirect != `${baseUrl}/demo/handle`) {
+    return res.json({ error: true, info: "Redirect URL doesn't match!" });
+  }
+
   if (data.error) {
     return res.json({ error: true, info: data.info });
   } else {
@@ -71,13 +76,17 @@ app.get("/api/verifyToken", async (req, res) => {
   }
   const username = obj.username;
   d = d.filter((x) => x.username !== username);
-  res.json({ error: false, info: "ok", username });
+  res.json({ error: false, info: "ok", username, redirect: obj.redirect });
 });
 
 app.get("/api/getCodes", async (req, res) => {
+  const { redirect } = req.query;
+  if(!redirect) {
+    res.status(400).json({ error: true, info: "provide ?redirect=url" });
+  }
   const { pub, priv } = await genBothCodes();
-  d.push({ pub, priv, name: null });
-  res.json({ pub, priv });
+  d.push({ pub, priv, name: null, redirect, });
+  res.json({ pub, priv, redirect });
 });
 
 app.get("/api/done", async (req, res) => {
