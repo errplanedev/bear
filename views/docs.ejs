@@ -27,7 +27,7 @@ app.get("/auth/handle", async (req, res) => {
     const { data } = await axios.get(`https://bear.dour.com/api/verifyToken?priv=${priv}`);
     
     // Make sure that the redirect location is ours, so malicious actors don't trick users into authenticating.
-    if(data.redirect != `${baseUrl}/demo/handle`) {
+    if(data.redirect != `https://example.com/demo/handle`) {
         return res.json({ error: true, info: "Redirect URL doesn't match!" });
     }
 
